@@ -1,6 +1,53 @@
 # Fedora Ultimate Setup Script
 
-Using only the [official Fedora 30 Workstation ISO](https://getfedora.org)
+## V3 UPDATED VERSION including Centos 8 Scripts
+
+![screenshot](https://github.com/David-Else/fedora-ultimate-setup-script/blob/master/install-script-v3.png)
+
+### Total rewrite for ease of customization
+
+I came to the conclusion that the original script was over engineered and the
+additional functionality of saving the packages to disk for re-use was too
+difficult to support with the use of Flatpak which has become more important.
+
+People are forking the script for their own use, and I felt a bit sorry for them
+having to negotiate the associative arrays and maze of function calls. I have
+spent some time attempting to make the script as simple and functional as
+possible, and in the process split it into two parts. This solves a super
+annoying problem with the original in that you had to keep coming back to the
+machine and saying yes to continue when the `sudo` privileges timed out.
+
+#### Fedora Installation and running
+
+Download this repository using git, CD into the directory, and run:
+
+```
+git clone https://github.com/David-Else/fedora-ultimate-setup-script
+cd fedora-ultimate-setup-script
+sudo ./fedora-ultimate-install-script.sh
+./fedora-ultimate-setup-script.sh
+```
+
+### Centos 8 Scripts
+
+I decided to try and recreate my desktop using Centos 8... and it worked! I had
+to use more flatpaks and work around things a bit, but I am running Centos 8 now
+and it is awesome!
+
+#### Centos 8 Installation and running
+
+Download this repository using git, CD into the directory, and run:
+
+```
+git clone https://github.com/David-Else/fedora-ultimate-setup-script
+cd fedora-ultimate-setup-script
+sudo ./centos8-ultimate-install-script.sh
+./centos8-ultimate-setup-script.sh
+```
+
+## V2 Legacy Version Docs... (ignore unless you want the backup functionality)
+
+Using only the [official Fedora 31 Workstation ISO](https://getfedora.org)
 create your perfect Fedora experience and save it to a USB drive to preserve
 forever!
 

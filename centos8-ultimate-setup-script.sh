@@ -1,31 +1,15 @@
 #!/bin/bash
 
-#==============================================================================
-#
-#         FILE: fedora-ultimate-setup-script.sh
-#        USAGE: fedora-ultimate-setup-script.sh
-#
-#  DESCRIPTION: Post-installation setup script for Fedora 29/30/31 Workstation
-#      WEBSITE: https://github.com/David-Else/fedora-ultimate-setup-script
-#
-# REQUIREMENTS: Fresh copy of Fedora 29/30 installed on your computer
-#               https://dl.fedoraproject.org/pub/fedora/linux/releases/31/Workstation/x86_64/iso/
-#       AUTHOR: David Else
-#      COMPANY: https://www.elsewebdevelopment.com/
-#      VERSION: 3.0
-#
-# Use 'phpcbf --standard=WordPress file.php' to autofix and format Wordpress code
-# Use 'composer global show / outdated / update' to manage composer packages
+# tested 21/01/20 on fresh install of CentOS-8.1.1911-x86_64
 # git clone --depth 1 https://github.com/junegunn/fzf.git ~/.fzf
 # ~/.fzf/install
-#==============================================================================
 
-BOLD=$(tput bold)
 GREEN=$(tput setaf 2)
+BOLD=$(tput bold)
 RESET=$(tput sgr0)
 
 if [ "$(id -u)" = 0 ]; then
-    echo "You're root! Use ./fedora-ultimate-setup-script.sh" && exit 1
+    echo "You're root! Run script as user" && exit 1
 fi
 
 # >>>>>> start of user settings <<<<<<
@@ -43,10 +27,10 @@ night_light="true"
 # git settings
 #==============================================================================
 git_email='example@example.com'
-git_user_name='example-name'
+git_user_name='example_name'
 
 #==============================================================================
-# php.ini settings *namesco default setting
+# php.ini settings
 #==============================================================================
 upload_max_filesize=128M
 post_max_size=128M
@@ -108,18 +92,6 @@ fullscreen=yes
 EOL
     }
 
-hash pnpm 2>/dev/null &&
-    #==========================================================================
-    # pnpm
-    #==========================================================================
-    {
-        if ! grep -xq "export NPM_CHECK_INSTALLER=pnpm" "$HOME/.bash_profile"; then
-            cat >>"$HOME/.bash_profile" <<'EOL'
-export NPM_CHECK_INSTALLER=pnpm
-EOL
-        fi
-    }
-
 hash php 2>/dev/null &&
     #==========================================================================
     # PHP
@@ -147,10 +119,14 @@ hash code 2>/dev/null &&
     # Visual Studio Code
     #==========================================================================
     {
+        ln -s /usr/share/myspell $HOME/.config/Code/Dictionaries
+        cat >>"$HOME/.bashrc" <<EOL
+alias code="GTK_IM_MODULE=ibus code"
+EOL
         cat >"$HOME/.config/Code/User/settings.json" <<'EOL'
 // Place your settings in this file to overwrite the default settings
 {
-  // VS Code 1.39
+  // VS Code 1.41.1
   // General settings
   "editor.fontSize": 15,
   "editor.renderWhitespace": "boundary",
@@ -159,9 +135,7 @@ hash code 2>/dev/null &&
   "editor.minimap.enabled": false,
   "editor.detectIndentation": false,
   "editor.tabSize": 2,
-  "editor.codeActionsOnSave": {
-    "source.organizeImports": true
-  },
+  "problems.showCurrentInStatus": true,
   "workbench.activityBar.visible": false,
   "workbench.tree.renderIndentGuides": "none",
   "workbench.list.keyboardNavigation": "filter",
@@ -174,7 +148,9 @@ hash code 2>/dev/null &&
   "git.autofetch": true,
   "git.enableSmartCommit": true,
   "git.decorations.enabled": false,
-  "terminal.integrated.env.linux": {"PS1": "$ "},
+  "terminal.integrated.env.linux": {
+    "PS1": "$ "
+  },
   "explorer.decorations.colors": false,
   "search.followSymlinks": false,
   "breadcrumbs.enabled": false,
@@ -186,12 +162,6 @@ hash code 2>/dev/null &&
   // Language settings
   "javascript.preferences.quoteStyle": "single",
   "typescript.updateImportsOnFileMove.enabled": "always",
-  "files.exclude": {
-    "**/*.js": {
-      "when": "$(basename).ts"
-    },
-    "**/*.js.map": true
-  },
   "[javascript]": {
     "editor.defaultFormatter": "esbenp.prettier-vscode"
   },
@@ -210,16 +180,18 @@ hash code 2>/dev/null &&
   "[jsonc]": {
     "editor.defaultFormatter": "esbenp.prettier-vscode"
   },
-  // Shell Format extension
+  // Shell extensions
   "shellformat.flag": "-i 4",
+  "shellcheck.enableQuickFix": true,
   // Live Server extension
   "liveServer.settings.donotShowInfoMsg": true,
   "liveServer.settings.ChromeDebuggingAttachment": true,
   "liveServer.settings.AdvanceCustomBrowserCmdLine": "/usr/bin/chromium-browser --remote-debugging-port=9222",
   // Spellright extension
   "spellright.language": [
-    "English (British)"
+    "en_GB"
   ],
+  "spellright.notificationClass": "warning",
   "spellright.documentTypes": [
     "markdown",
     "latex",
@@ -351,10 +323,6 @@ EOL
 EOL
     }
 
-"$HOME/.config/composer/vendor/bin/phpcs" --config-set installed_paths ~/.config/composer/vendor/wp-coding-standards/wpcs
-"$HOME/.config/composer/vendor/bin/phpcs" --config-set default_standard PSR12
-"$HOME/.config/composer/vendor/bin/phpcs" --config-show
-
 #==============================================================================
 # setup gnome desktop gsettings
 #==============================================================================
@@ -362,10 +330,6 @@ echo "${BOLD}Setting up Gnome desktop gsettings...${RESET}"
 
 gsettings set org.gnome.desktop.session \
     idle-delay $idle_delay
-gsettings set org.gnome.shell.extensions.auto-move-windows \
-    application-list "['org.gnome.Nautilus.desktop:2', 'org.gnome.Terminal.desktop:3', 'code.desktop:1', 'firefox.desktop:1']"
-gsettings set org.gnome.shell enabled-extensions \
-    "['pomodoro@arun.codito.in', 'auto-move-windows@gnome-shell-extensions.gcampax.github.com']"
 
 if [[ "${title_bar_buttons_on}" == "true" ]]; then
     gsettings set org.gnome.desktop.wm.preferences \
@@ -403,20 +367,21 @@ sudo sed -i "s/; avoid-resampling = false/avoid-resampling = true/g" /etc/pulse/
 #==============================================================================
 # setup jack audio for real time use
 #==============================================================================
-sudo usermod -a -G jackuser "$USERNAME" # Add current user to jackuser group
-sudo tee /etc/security/limits.d/95-jack.conf <<EOL
-# Default limits for users of jack-audio-connection-kit
+# sudo usermod -a -G jackuser "$USERNAME" # Add current user to jackuser group
+# sudo tee /etc/security/limits.d/95-jack.conf <<EOL
+# # Default limits for users of jack-audio-connection-kit
 
-@jackuser - rtprio 98
-@jackuser - memlock unlimited
+# @jackuser - rtprio 98
+# @jackuser - memlock unlimited
 
-@pulse-rt - rtprio 20
-@pulse-rt - nice -20
-EOL
+# @pulse-rt - rtprio 20
+# @pulse-rt - nice -20
+# EOL
 
 #==============================================================================
 # setup git user name and email if none exist
 #==============================================================================
+echo "${BOLD}Setting up Git...${RESET}"
 if [[ -z $(git config --get user.name) ]]; then
     git config --global user.name $git_user_name
     echo "No global git user name was set, I have set it to ${BOLD}$git_user_name${RESET}"
@@ -428,13 +393,6 @@ if [[ -z $(git config --get user.email) ]]; then
 fi
 
 #==============================================================================================
-# turn on subpixel rendering for fonts without fontconfig support
-#==============================================================================================
-if ! grep -xq "Xft.lcdfilter: lcddefault" "$HOME/.Xresources"; then
-    echo "Xft.lcdfilter: lcddefault" >>"$HOME/.Xresources"
-fi
-
-#==============================================================================================
 # improve ls and tree commands output
 #==============================================================================================
 cat >>"$HOME/.bashrc" <<EOL
@@ -443,14 +401,39 @@ alias tree="tree -Catr --noreport --dirsfirst --filelimit 100" # -C=colorization
 EOL
 
 #==============================================================================================
-# increase the amount of inotify watchers
+# turn on subpixel rendering for fonts without fontconfig support
+#==============================================================================================
+if ! grep -xq "Xft.lcdfilter: lcddefault" "$HOME/.Xresources"; then
+    echo "Xft.lcdfilter: lcddefault" >>"$HOME/.Xresources"
+fi
+
+#==============================================================================================
+# misc
 #==============================================================================================
 echo fs.inotify.max_user_watches=524288 | sudo tee -a /etc/sysctl.conf && sudo sysctl -p
-
 touch $HOME/Templates/empty-file # so you can create new documents from nautilus
 
 cat <<EOL
-  ===================================================
+  =================================================================
+  Use Gnome Software to install 'Hide Top Bar'
+                                'Auto Move Windows'
+  Add:
+
+  https://addons.mozilla.org/en-GB/firefox/addon/https-everywhere/
+  https://addons.mozilla.org/en-GB/firefox/addon/privacy-badger17/
+  https://addons.mozilla.org/en-GB/firefox/addon/ublock-origin/
+
+  Change settings/details/default applications
+  Change tweaks/fonts/ to Subpixel (for LCD screens)
+  Select network > wired > connect automatically
+
+  For VS Code:
+
+  go to terminal type 'ibus-setup'
+  go to Emoji tab, press the '...' next to Emoji choice to get 'select keyboard shortcut for switching' window
+  use the delete button to delete the shortcut and leave nothing there, press OK
+  Close
+
   Please reboot (or things may not work as expected)
-  ===================================================
+  =================================================================
 EOL
