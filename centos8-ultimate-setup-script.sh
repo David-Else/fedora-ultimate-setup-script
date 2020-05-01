@@ -107,9 +107,9 @@ hash composer 2>/dev/null &&
     # Composer
     #==========================================================================
     {
-        if ! grep -xq 'PATH=$PATH:/home/$USERNAME/.config/composer/vendor/bin' "$HOME/.bash_profile"; then
+        if ! grep -xq 'PATH=$PATH:/home/$LOGNAME/.config/composer/vendor/bin' "$HOME/.bash_profile"; then
             cat >>"$HOME/.bash_profile" <<'EOL'
-PATH=$PATH:/home/$USERNAME/.config/composer/vendor/bin
+PATH=$PATH:/home/$LOGNAME.config/composer/vendor/bin
 EOL
         fi
     }
@@ -367,7 +367,7 @@ sudo sed -i "s/; avoid-resampling = false/avoid-resampling = true/g" /etc/pulse/
 #==============================================================================
 # setup jack audio for real time use
 #==============================================================================
-# sudo usermod -a -G jackuser "$USERNAME" # Add current user to jackuser group
+# sudo usermod -a -G jackuser "$LOGNAME" # Add current user to jackuser group
 # sudo tee /etc/security/limits.d/95-jack.conf <<EOL
 # # Default limits for users of jack-audio-connection-kit
 

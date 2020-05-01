@@ -44,7 +44,14 @@ packages_to_install=(
     mediainfo
     syncthing
     ImageMagick
-    fuse-exfat)
+    fuse-exfat
+	htop
+	mlocate
+	mc
+	grc
+	neofetch
+	numlockx
+	)
 
 flathub_packages_to_install=(
     org.kde.krita
@@ -118,6 +125,12 @@ dnf -y config-manager --enable PowerTools
 dnf -y install epel-release
 dnf -y install --nogpgcheck https://download1.rpmfusion.org/free/el/rpmfusion-free-release-8.noarch.rpm https://download1.rpmfusion.org/nonfree/el/rpmfusion-nonfree-release-8.noarch.rpm
 flatpak remote-add --if-not-exists flathub https://flathub.org/repo/flathub.flatpakrepo
+dnf -y install snapd; ln -s /var/lib/snapd/snap /snap; snap install snap-store; systemctl enable --now snapd.socket; snap set system refresh.timer=4:00-7:00,21:00-23:50; sh -c "echo 'export PATH="\$PATH:/snap/bin/"' >> /etc/profile"
+
+dnf install -y dnf-plugins-core
+dnf copr enable -y tkorbar/cheat
+dnf copr enable -y konimex/neofetch
+dnf copr enable -y angeldm/psensor
 
 # note the spaces to make sure something like 'notnode' could not trigger 'nodejs' using [*]
 case " ${packages_to_install[*]} " in
