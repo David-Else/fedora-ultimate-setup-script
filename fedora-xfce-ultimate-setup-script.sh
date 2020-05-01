@@ -2,15 +2,15 @@
 
 #==============================================================================
 #
-#         FILE: fedora-ultimate-setup-script.sh
-#        USAGE: fedora-ultimate-setup-script.sh
+#         FILE: fedora-xfce-ultimate-setup-script.sh
+#        USAGE: fedora-xfce-ultimate-setup-script.sh
 #
-#  DESCRIPTION: Post-installation setup script for Fedora 29/30/31 Workstation
-#      WEBSITE: https://github.com/David-Else/fedora-ultimate-setup-script
+#  DESCRIPTION: Post-installation setup script for Fedora 29/30/31 Xfce
+#      WEBSITE: https://github.com/CSRedRat/fedora-xfce-setup-script
 #
-# REQUIREMENTS: Fresh copy of Fedora 29/30 installed on your computer
-#               https://dl.fedoraproject.org/pub/fedora/linux/releases/31/Workstation/x86_64/iso/
-#       AUTHOR: David Else
+# REQUIREMENTS: Fresh copy of Fedora Xfce installed on your computer
+#               https://spins.fedoraproject.org/ru/xfce/
+#       AUTHOR: David Else, Sergey Chudakov
 #      COMPANY: https://www.elsewebdevelopment.com/
 #      VERSION: 3.0
 #
@@ -25,19 +25,10 @@ GREEN=$(tput setaf 2)
 RESET=$(tput sgr0)
 
 if [ "$(id -u)" = 0 ]; then
-    echo "You're root! Use ./fedora-ultimate-setup-script.sh" && exit 1
+    echo "You're root! Use ./fedora-xfce-ultimate-setup-script.sh" && exit 1
 fi
 
 # >>>>>> start of user settings <<<<<<
-
-#==============================================================================
-# gnome desktop settings
-#==============================================================================
-idle_delay=1200
-title_bar_buttons_on="true"
-clock_show_date="true"
-capslock_delete="true"
-night_light="true"
 
 #==============================================================================
 # git settings
@@ -59,15 +50,6 @@ max_execution_time=60
 #==============================================================================
 clear
 cat <<EOL
-${BOLD}Gnome settings${RESET}
-${BOLD}-------------------${RESET}
-
-Increase the delay before the desktop logs out: ${GREEN}$idle_delay${RESET} seconds
-Add minimize, maximize and close buttons to windows: ${GREEN}$title_bar_buttons_on${RESET}
-Display the date on the desktop: ${GREEN}$clock_show_date${RESET}
-Change caps into a backspace for touch typing: ${GREEN}$capslock_delete${RESET}
-Turn on night light: ${GREEN}$night_light${RESET}
-
 ${BOLD}Git settings${RESET}
 ${BOLD}-------------------${RESET}
 
@@ -105,6 +87,10 @@ hash mpv 2>/dev/null &&
 profile=gpu-hq
 hwdec=auto
 fullscreen=yes
+gpu-context=drm
+video-sync=display-resample
+interpolation
+tscale=oversample
 EOL
     }
 
@@ -354,38 +340,6 @@ EOL
 "$HOME/.config/composer/vendor/bin/phpcs" --config-set installed_paths ~/.config/composer/vendor/wp-coding-standards/wpcs
 "$HOME/.config/composer/vendor/bin/phpcs" --config-set default_standard PSR12
 "$HOME/.config/composer/vendor/bin/phpcs" --config-show
-
-#==============================================================================
-# setup gnome desktop gsettings
-#==============================================================================
-echo "${BOLD}Setting up Gnome desktop gsettings...${RESET}"
-
-gsettings set org.gnome.desktop.session \
-    idle-delay $idle_delay
-gsettings set org.gnome.shell.extensions.auto-move-windows \
-    application-list "['org.gnome.Nautilus.desktop:2', 'org.gnome.Terminal.desktop:3', 'code.desktop:1', 'firefox.desktop:1']"
-gsettings set org.gnome.shell enabled-extensions \
-    "['pomodoro@arun.codito.in', 'auto-move-windows@gnome-shell-extensions.gcampax.github.com']"
-
-if [[ "${title_bar_buttons_on}" == "true" ]]; then
-    gsettings set org.gnome.desktop.wm.preferences \
-        button-layout 'appmenu:minimize,maximize,close'
-fi
-
-if [[ "${clock_show_date}" == "true" ]]; then
-    gsettings set org.gnome.desktop.interface \
-        clock-show-date true
-fi
-
-if [[ "${capslock_delete}" == "true" ]]; then
-    gsettings set org.gnome.desktop.input-sources \
-        xkb-options "['caps:backspace', 'terminate:ctrl_alt_bksp']"
-fi
-
-if [[ "${night_light}" == "true" ]]; then
-    gsettings set org.gnome.settings-daemon.plugins.color \
-        night-light-enabled true
-fi
 
 #==============================================================================
 # setup pulse audio with the best sound quality possible

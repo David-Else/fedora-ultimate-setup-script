@@ -2,14 +2,14 @@
 
 #==============================================================================
 #
-#         FILE: fedora-ultimate-install-script.sh
-#        USAGE: sudo fedora-ultimate-install-script.sh
+#         FILE: fedora-xfce-ultimate-install-script.sh
+#        USAGE: sudo fedora-xfce-ultimate-install-script.sh
 #
-#  DESCRIPTION: Post-installation install script for Fedora 29/30/31 Workstation
-#      WEBSITE: https://github.com/David-Else/fedora-ultimate-setup-script
+#  DESCRIPTION: Post-installation install script for Fedora 29/30/31 Xfce
+#      WEBSITE: https://github.com/CSRedRat/fedora-xfce-setup-script
 #
-# REQUIREMENTS: Fresh copy of Fedora 29/30/31 installed on your computer
-#               https://dl.fedoraproject.org/pub/fedora/linux/releases/31/Workstation/x86_64/iso/
+# REQUIREMENTS: Fresh copy of Fedora Xfce installed on your computer
+#               https://spins.fedoraproject.org/ru/xfce/
 #       AUTHOR: David Else
 #      COMPANY: https://www.elsewebdevelopment.com/
 #      VERSION: 3.0
@@ -28,7 +28,7 @@ BOLD=$(tput bold)
 RESET=$(tput sgr0)
 
 if [ "$(id -u)" != 0 ]; then
-    echo "You're not root! Use sudo ./fedora-ultimate-install-script.sh" && exit 1
+    echo "You're not root! Use sudo ./fedora-xfce-ultimate-install-script.sh" && exit 1
 fi
 
 if [[ $(rpm -E %fedora) -lt 29 ]]; then
@@ -45,22 +45,23 @@ packages_to_remove=(
     gnome-documents
     rhythmbox
     totem
-    cheese)
+    cheese
+	claws-mail
+	abiword
+	gnumeric
+	pidgin
+	)
 
 #==============================================================================
 # common packages to install *arrays can be left empty, but don't delete them
 #==============================================================================
 fedora=(
     shotwell
-    java-1.8.0-openjdk
+    #java-1.8.0-openjdk
     jack-audio-connection-kit
     mediainfo
-    syncthing
-    borgbackup
-    gnome-tweaks
     mkvtoolnix-gui
     tldr
-    dolphin-emu
     mame
     chromium
     youtube-dl
@@ -68,9 +69,8 @@ fedora=(
     transmission-gtk
     lshw
     fuse-exfat
+	vulkan
     mpv
-    gnome-shell-extension-pomodoro
-    gnome-shell-extension-auto-move-windows.noarch
 	htop
 	mlocate
 	mc

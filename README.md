@@ -77,6 +77,12 @@ cd fedora-ultimate-setup-script
 
 Now follow the on-screen instructions.
 
+For [Xfce](https://spins.fedoraproject.org/ru/xfce/) flavor run:
+
+```
+./fedora-xfce-ultimate-setup-script.sh
+```
+
 ## Offline Mode (optional)
 
 To use this script offline requires you have used it before previously online to
@@ -131,7 +137,7 @@ REMOVE_LIST=(gnome-photos gnome-documents rhythmbox totem cheese)
 ### Customize the adding of repositories
 
 In the `add_repositories()` function you will see
-[RPM Fusion](https://rpmfusion.org/) and [Flathub](https://flathub.org/home) are
+[RPM Fusion](https://rpmfusion.org/), [RPM Sphere](https://rpmsphere.github.io/), [Flathub](https://flathub.org/home) and [Snap](https://snapcraft.io/store) are
 installed by default. After that certain packages trigger certain repositories
 to be installed. You can add your own here.
 
@@ -183,3 +189,4 @@ that does it is:
 ```
 
 You can delete the `'caps:backspace',` to rectify the situation.
+
