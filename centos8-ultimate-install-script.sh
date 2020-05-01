@@ -51,7 +51,7 @@ packages_to_install=(
 	grc
 	neofetch
 	numlockx
-	)
+)
 
 flathub_packages_to_install=(
     org.kde.krita
