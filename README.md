@@ -1,3 +1,9 @@
+# This project has been superseded by https://github.com/David-Else/developer-workstation-setup-script !
+
+I have totally re-written and improved everything. I think it is different enough to warrant a new repository.
+
+If you have any feedback or questions please head over to https://github.com/David-Else/developer-workstation-setup-script/discussions
+
 # Fedora and Centos Ultimate Setup Scripts v5.1 (Jan 2021)
 
 **Welcome to your new ultimate desktop!** You can now choose between long term support with Centos and cutting edge features with Fedora. Run these scripts after a fresh install of your favorite OS. You can re-create the same set of applications and settings across both distributions.
